@@ -24,6 +24,12 @@ from aumai_jaldrishti.models import (
 )
 
 
+_WATER_DISCLAIMER = (
+    "\nVerify water quality data with local authorities and laboratory testing before making decisions. "
+    "This tool does not replace certified water quality testing.\n"
+)
+
+
 @click.group()
 @click.version_option()
 def cli() -> None:
@@ -55,6 +61,7 @@ def source(input_file: str) -> None:
             click.echo(f"Low yield sources ({len(low)}):")
             for s in low:
                 click.echo(f"  - {s.name}: {s.yield_pct:.0f}% capacity")
+    click.echo(_WATER_DISCLAIMER)
 
 
 @cli.command()
@@ -85,6 +92,7 @@ def quality(input_file: str) -> None:
             click.echo("  Recommended treatment:")
             for t in treatments:
                 click.echo(f"    - {t}")
+    click.echo(_WATER_DISCLAIMER)
 
 
 @cli.command()
@@ -114,6 +122,7 @@ def fhtc(input_file: str) -> None:
 
     summary = tracker.coverage_summary()
     click.echo(f"\nOverall: {summary['avg_coverage_pct']:.1f}% coverage, {summary['avg_functional_pct']:.1f}% functional")
+    click.echo(_WATER_DISCLAIMER)
 
 
 @cli.command()
@@ -149,6 +158,7 @@ def groundwater(input_file: str, panchayat: str) -> None:
         alerts = engine.check_groundwater(latest)
         for alert in alerts:
             click.echo(f"  [{alert.level.value.upper()}] {alert.message}")
+    click.echo(_WATER_DISCLAIMER)
 
 
 @cli.command()
@@ -179,6 +189,7 @@ def rainfall(input_file: str, panchayat: str, year: int) -> None:
     click.echo(f"  Drought risk: {drought}")
     click.echo(f"  Flood risk: {flood}")
     click.echo(f"\n  Monsoon (Jun-Sep): {monsoon['actual_mm']:.0f} mm vs {monsoon['normal_mm']:.0f} mm ({monsoon['deviation_pct']:+.1f}%)")
+    click.echo(_WATER_DISCLAIMER)
 
 
 @cli.command()
@@ -207,7 +218,7 @@ def budget(population: int, livestock: int, irrigated_ha: float, supply_lpd: flo
         lpcd = supply_lpd / population if population > 0 else 0
         click.echo(f"  LPCD: {lpcd:.0f} (JJM standard: 55)")
 
-    click.echo("\nVerify water data with local authorities before making decisions.")
+    click.echo(_WATER_DISCLAIMER)
 
 
 main = cli

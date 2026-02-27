@@ -73,7 +73,7 @@ class WaterQualityReport(BaseModel):
     iron_ppm: float = Field(ge=0, default=0)
     nitrate_ppm: float = Field(ge=0, default=0)
     coliform_present: bool = False
-    grade: WaterQualityGrade = WaterQualityGrade.SAFE
+    grade: WaterQualityGrade = WaterQualityGrade.HAZARDOUS
 
 
 class FHTCStatus(BaseModel):
